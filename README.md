@@ -28,7 +28,8 @@ CREATE TABLE devices (
 ```
 ### 2. `Validation` table
 
-```CREATE TABLE validation_results (
+```sql
+CREATE TABLE validation_results (
     id SERIAL PRIMARY KEY,
     device_id INT REFERENCES devices(id), -- Foreign key linking to the `devices` table
     time_diff_minutes DOUBLE PRECISION,   -- Time difference between drone timestamp and server timestamp (in minutes)
