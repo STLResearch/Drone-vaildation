@@ -2,6 +2,11 @@
 
 This project is a Python-based tool that validates drone location data against various criteria like time discrepancies, speed limits, altitude drops, and country mismatches (based on IP and Lat/Long coordinates). The results of the validation are stored in a PostgreSQL database.
 
+Three validation criteria we discussed for the drone data quality:
+1. To check the timestamp from the drone (last observation time) vs the local timestamp on the server from the time when that drone observation was recorded -- if it is above some X value (1 minute?), we flag the data as suspicious
+2. If the country inferred from the IP of the mobile phone sending the data (you could probably use https://geo.ipify.org/docs to map IP to the country) is different from the country inferred from the lat/long coordinates in RemoteID data, it is suspicious.
+3. We calculate the theoretical speed of the drone (3D speed, not only 2D speed) between each of the observations. If it is higher than the maximum speed of that type of the drone as specified by that drone producer -- flag it as suspicious. We need to account for the situation when the drone is falling from the sky (i.e., lon/lat is not really changing, but the altitude is rapidly decreasing);, even if it is suspiciously fast, it probably should not be treated as suspicious.
+
 ## Features
 
 - **Timestamp Validation**: Compares the drone's timestamp with the server's current time and flags any significant delays.
